@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 "use client";
 
+import ForgotPasswordConfirmation from "@/components/ForgotPasswordConfirmation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useAuth } from "@/contexts/AuthProvider";
@@ -23,17 +24,18 @@ export default function ForgotPassword({}: ForgotPasswordProps) {
       const response = await forgotPassword(email);
       console.log(response);
 
-      // @ts-expect-error
-      if (response?.success) {
-        setSuccess(
-          "Password reset email sent successfully. Please check your inbox."
-        );
-      }
+      setSuccess(
+        "Password reset email sent successfully. Please check your inbox."
+      );
     } catch (err) {
       console.log(err);
       setSuccess("");
     }
   };
+
+  if (success) {
+    return <ForgotPasswordConfirmation email={email} />;
+  }
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
@@ -58,8 +60,22 @@ export default function ForgotPassword({}: ForgotPasswordProps) {
       <button
         type="button"
         onClick={() => router.push("/login")}
-        className="text-blue-400 hover:underline block w-full text-center"
+        className="text-blue-400 hover:underline  w-full text-center items-center flex justify-center"
       >
+        <svg
+          className="w-4 h-4 mr-2"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M10 19l-7-7m0 0l7-7m-7 7h18"
+          />
+        </svg>
         Back to Login
       </button>
     </form>
