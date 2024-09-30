@@ -2,20 +2,22 @@
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { resendVerificationEmail, verifyEmail } from "@/services/api";
+import { resendVerificationEmail } from "@/services/api";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { LoaderCircleIcon } from "lucide-react";
+import { Loader } from "lucide-react";
+import React from "react";
+import { useAuth } from "@/contexts/AuthProvider";
 
 type VerifyEmailProps = object;
 
 export default function VerifyEmail({}: VerifyEmailProps) {
   const [code, setCode] = useState(["", "", "", "", "", ""]);
-  const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [resendLoading, setResendLoading] = useState(false);
   const [resendSuccess, setResendSuccess] = useState(false);
+  const { verifyEmail, error, loading } = useAuth();
 
   const router = useRouter();
 
@@ -49,17 +51,14 @@ export default function VerifyEmail({}: VerifyEmailProps) {
     e.preventDefault();
     try {
       const response = await verifyEmail(code.join(""));
-      console.log(response);
-      setSuccess("Email verified successfully!");
-      setError("");
-      setTimeout(() => router.push("/dashboard"), 2000);
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-expect-error
+      if (response?.success) {
+        setSuccess("Email verified successfully!");
+        setTimeout(() => router.push("/dashboard"), 2000);
+      }
     } catch (err) {
-      setError(
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-expect-error
-        err.response?.data?.message ||
-          "An error occurred during email verification."
-      );
+      console.log(err);
       setSuccess("");
     }
   };
@@ -81,7 +80,7 @@ export default function VerifyEmail({}: VerifyEmailProps) {
     <form onSubmit={handleSubmit} className="space-y-6">
       <h2 className="text-2xl font-bold text-center">Verify Your Email</h2>
       {error && <p className="text-red-500">{error}</p>}
-      {success && <p className="text-blue-500">{success}</p>}
+      {success && <p className="text-greeb-500 text-center">{success}</p>}
       {resendSuccess && (
         <Alert variant="default">
           <AlertTitle>Success</AlertTitle>
@@ -106,7 +105,11 @@ export default function VerifyEmail({}: VerifyEmailProps) {
           />
         ))}
       </div>
-      <Button type="submit" className="w-full bg-blue-500 hover:bg-blue-600">
+      <Button
+        disabled={loading}
+        type="submit"
+        className="w-full bg-blue-500 hover:bg-blue-600"
+      >
         Verify Email
       </Button>
       <div className="text-center">
@@ -120,7 +123,7 @@ export default function VerifyEmail({}: VerifyEmailProps) {
         >
           {resendLoading ? (
             <>
-              <LoaderCircleIcon className="animate-spin mr-2" />
+              <Loader className="animate-spin mr-2" />
               Resending...
             </>
           ) : (

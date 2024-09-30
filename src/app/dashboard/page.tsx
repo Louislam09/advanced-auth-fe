@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/AuthProvider";
 import { formatJoinedDate, FormatOption } from "@/lib/utils";
 import { CheckCircle, XCircle } from "lucide-react";
+import React from "react";
 
 type DashboardProps = object;
 
@@ -53,8 +54,12 @@ export default function Dashboard({}: DashboardProps) {
               )}
             </Badge>
           </h2>
-          <p className="text-gray-300">Name: {name}</p>
-          <p className="text-gray-300">Email: {email}</p>
+          <p className="text-gray-300">
+            <b>Name:</b> {name}
+          </p>
+          <p className="text-gray-300">
+            <b>Email:</b> {email}
+          </p>
         </div>
 
         <div className="bg-gray-700 rounded-lg p-4 mb-6 transform transition-all duration-300 ease-in-out hover:bg-gray-600 animate-fade-in-up animation-delay-150">
@@ -62,10 +67,11 @@ export default function Dashboard({}: DashboardProps) {
             Account Activity
           </h2>
           <p className="text-gray-300">
-            Joined: {formatJoinedDate(joinedDate || "", FormatOption.LongDate)}
+            <b>Joined:</b>{" "}
+            {formatJoinedDate(joinedDate || "", FormatOption.LongDate)}
           </p>
           <p className="text-gray-300">
-            Last Login:{" "}
+            <b>Last Login: </b>
             {formatJoinedDate(lastLogin || "", FormatOption.LongDate)}
           </p>
         </div>

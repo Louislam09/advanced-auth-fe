@@ -3,6 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useAuth } from "@/contexts/AuthProvider";
+import { Loader } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
@@ -26,7 +27,7 @@ export default function Login({}: LoginProps) {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
-      <h2 className="text-2xl font-bold text-center">Log In</h2>
+      <h2 className="text-3xl font-bold text-center">Welcome Back</h2>
       {error && <p className="text-red-500">{error}</p>}
       <Input
         className="text-black"
@@ -49,7 +50,7 @@ export default function Login({}: LoginProps) {
         className="w-full bg-blue-500 hover:bg-blue-600"
         disabled={loading}
       >
-        {loading ? "Logging in..." : "Login"}
+        {loading ? <Loader className="animate-spin mr-2" /> : "Login"}
       </Button>
       <div className="text-center space-y-2 ">
         <button

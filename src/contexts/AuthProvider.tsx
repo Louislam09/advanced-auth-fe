@@ -80,7 +80,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     try {
       const response = await api.signup(name, email, password);
       setUser(response.user);
-      router.push("/verify-email");
+      setTimeout(() => router.push("/verify-email"), 2000);
     } catch (err) {
       setError(
         // @ts-expect-error
@@ -113,8 +113,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     setError(null);
     try {
       const response = await api.verifyEmail(code);
-      setUser(response.user);
-      router.push("/dashboard");
+      setUser(response?.user);
+      return response;
+      // router.push("/dashboard");
     } catch (err) {
       setError(
         // @ts-expect-error
@@ -144,8 +145,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     setLoading(true);
     setError(null);
     try {
-      await api.forgotPassword(email);
-      router.push("/verify-email");
+      return await api.forgotPassword(email);
     } catch (err) {
       setError(
         // @ts-expect-error
@@ -162,7 +162,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     setError(null);
     try {
       await api.resetPassword(token, newPassword);
-      router.push("/login");
+      setTimeout(() => router.push("/login"), 2000);
     } catch (err) {
       setError(
         // @ts-expect-error
